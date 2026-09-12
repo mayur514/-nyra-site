@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nyra — Systems that think ahead</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0B0E14;
+    --surface: #12161F;
+    --surface-2: #171C27;
+    --line: #262C3A;
+    --text: #E8ECF4;
+    --text-dim: #8891A4;
+    --accent: #6E63FF;
+    --accent-2: #34D8A6;
+    --radius: 4px;
+  }
+  *{ box-sizing: border-box; margin:0; padding:0; }
+  html{ scroll-behavior: smooth; }
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+  h1,h2,h3{
+    font-family: 'Space Grotesk', sans-serif;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .mono{ font-family: 'IBM Plex Mono', monospace; }
+  a{ color: inherit; text-decoration: none; }
+  img{ max-width: 100%; }
+  .wrap{
+    max-width: 1180px;
+    margin: 0 auto;
+    padding: 0 40px;
+  }
+
+  /* ---------- Nav ---------- */
+  header{
+    position: fixed;
+    top:0; left:0; right:0;
+    z-index: 50;
+    background: rgba(11,14,20,0.72);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+  nav.wrap{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    height: 72px;
+  }
+  .logo{
+    font-family:'Space Grotesk', sans-serif;
+    font-weight:700;
+    font-size: 1.25rem;
+    display:flex;
+    align-items:center;
+    gap: 8px;
+  }
+  .logo-mark{
+    width: 18px; height:18px;
+    background: linear-gradient(135deg, var(--accent), var(--accent-2));
+    border-radius: 3px;
+    flex-shrink:0;
+  }
+  .nav-links{
+    display:flex;
+    gap: 36px;
+    font-size: 0.92rem;
+    color: var(--text-dim);
+  }
+  .nav-links a:hover{ color: var(--text); }
+  .nav-cta{
+    font-size: 0.88rem;
+    padding: 9px 18px;
+    border: 1px solid rgba(255,255,255,0.16);
+    border-radius: var(--radius);
+    transition: border-color .2s, background .2s;
+  }
+  .nav-cta:hover{ border-color: var(--accent); background: rgba(110,99,255,0.08); }
+  @media (max-width: 780px){ .nav-links{ display:none; } }
+
+  /* ---------- Hero ---------- */
+  .hero{
+    position: relative;
+    height: 100svh;
+    min-height: 620px;
+    display:flex;
+    align-items:flex-end;
+    overflow:hidden;
+  }
+  .video-container{
+    position:absolute;
+    inset: 0;
+    overflow: hidden;
+  }
+  .video-container video{
+    position:absolute;
+    top:50%; left:50%;
+    width:100%; height:100%;
+    object-fit: cover;
+    transform: translate(-50%,-50%);
+    filter: saturate(1.05) contrast(1.05);
+  }
+  .hero::before{
+    content:"";
+    position:absolute; inset:0;
+    background:
+      linear-gradient(180deg, rgba(8,10,15,0.55) 0%, rgba(8,10,15,0.35) 30%, rgba(8,10,15,0.92) 92%),
+      linear-gradient(100deg, rgba(8,10,15,0.75) 0%, rgba(8,10,15,0.15) 55%);
+    z-index:1;
+  }
+  .hero-content{
+    position: relative;
+    z-index: 2;
+    padding-bottom: 88px;
+    width: 100%;
+  }
+  .hero-tag{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    border: 1px solid rgba(255,255,255,0.14);
+    padding: 6px 12px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+  }
+  .hero-tag .dot{
+    width:6px; height:6px; border-radius:50%;
+    background: var(--accent-2);
+    box-shadow: 0 0 8px var(--accent-2);
+  }
+  .hero h1{
+    font-size: clamp(2.4rem, 5.4vw, 4.6rem);
+    line-height: 1.05;
+    max-width: 780px;
+    color: #fff;
+  }
+  .hero p{
+    margin-top: 22px;
+    font-size: 1.08rem;
+    color: #C4CAD9;
+    max-width: 480px;
+  }
+  .hero-actions{
+    margin-top: 36px;
+    display:flex;
+    gap: 14px;
+    flex-wrap: wrap;
+  }
+  .btn{
+    padding: 13px 26px;
+    border-radius: var(--radius);
+    font-size: 0.95rem;
+    font-weight: 500;
+    display:inline-block;
+  }
+  .btn-primary{
+    background: var(--text);
+    color: #0B0E14;
+  }
+  .btn-primary:hover{ background: #cfd4e0; }
+  .btn-ghost{
+    border: 1px solid rgba(255,255,255,0.22);
+    color: var(--text);
+  }
+  .btn-ghost:hover{ border-color: rgba(255,255,255,0.5); }
+
+  .hero-meta{
+    position: absolute;
+    right: 40px;
+    bottom: 40px;
+    z-index: 2;
+    text-align: right;
+    color: var(--text-dim);
+    font-size: 0.8rem;
+    display:none;
+  }
+  @media (min-width: 900px){ .hero-meta{ display:block; } }
+
+  /* ---------- Trust strip ---------- */
+  .trust{
+    border-bottom: 1px solid var(--line);
+    padding: 26px 0;
+  }
+  .trust .wrap{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: var(--text-dim);
+    font-size: 0.88rem;
+  }
+  .trust-names{
+    display:flex;
+    gap: 34px;
+    flex-wrap: wrap;
+    font-family:'Space Grotesk', sans-serif;
+    font-weight: 500;
+    color: #5C6478;
+  }
+
+  /* ---------- Section shell ---------- */
+  section{ padding: 120px 0; }
+  .section-head{
+    max-width: 620px;
+    margin-bottom: 64px;
+  }
+  .section-head h2{
+    font-size: clamp(1.8rem, 3vw, 2.6rem);
+  }
+  .section-head p{
+    margin-top: 16px;
+    color: var(--text-dim);
+    font-size: 1.02rem;
+  }
+
+  /* ---------- Feature ledger ---------- */
+  .ledger{
+    border-top: 1px solid var(--line);
+  }
+  .ledger-row{
+    display:grid;
+    grid-template-columns: 60px 1fr 1.4fr;
+    gap: 32px;
+    padding: 40px 0;
+    border-bottom: 1px solid var(--line);
+    align-items: start;
+  }
+  .ledger-row .idx{
+    font-family:'IBM Plex Mono', monospace;
+    color: var(--accent-2);
+    font-size: 0.9rem;
+    padding-top: 4px;
+  }
+  .ledger-row h3{
+    font-size: 1.3rem;
+  }
+  .ledger-row p{
+    color: var(--text-dim);
+    font-size: 0.98rem;
+    max-width: 460px;
+  }
+  @media (max-width: 720px){
+    .ledger-row{ grid-template-columns: 40px 1fr; }
+    .ledger-row p{ grid-column: 2; }
+  }
+
+  /* ---------- Stats ---------- */
+  .stats{
+    background: var(--surface);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .stats .wrap{
+    display:grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 40px;
+  }
+  .stat-num{
+    font-family:'Space Grotesk', sans-serif;
+    font-size: 2.6rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, #fff, #9CA3B8);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+  }
+  .stat-label{
+    color: var(--text-dim);
+    font-size: 0.9rem;
+    margin-top: 6px;
+  }
+  @media (max-width: 780px){
+    .stats .wrap{ grid-template-columns: repeat(2, 1fr); row-gap: 40px; }
+  }
+
+  /* ---------- Product panel ---------- */
+  .panel{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 70px;
+    align-items:center;
+  }
+  .panel-visual{
+    background: var(--surface-2);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px;
+    font-family:'IBM Plex Mono', monospace;
+    font-size: 0.84rem;
+    color: #8FE8C6;
+    overflow: hidden;
+  }
+  .panel-visual .line{ color: var(--text-dim); }
+  .panel-visual .line span{ color: var(--accent-2); }
+  .panel h2{ font-size: clamp(1.6rem,2.6vw,2.2rem); margin-bottom: 18px; }
+  .panel p{ color: var(--text-dim); margin-bottom: 26px; }
+  .check-list{ display:flex; flex-direction:column; gap:14px; }
+  .check-list li{ list-style:none; display:flex; gap:12px; font-size: 0.96rem; }
+  .check-list li::before{
+    content:"";
+    width:6px; height:6px;
+    margin-top:8px;
+    background: var(--accent);
+    flex-shrink:0;
+  }
+  @media (max-width: 860px){ .panel{ grid-template-columns: 1fr; } }
+
+  /* ---------- CTA ---------- */
+  .cta{
+    text-align:left;
+    border-top: 1px solid var(--line);
+  }
+  .cta-box{
+    display:flex;
+    justify-content: space-between;
+    align-items:center;
+    flex-wrap: wrap;
+    gap: 30px;
+  }
+  .cta-box h2{ font-size: clamp(1.8rem,3.4vw,2.8rem); max-width: 520px; }
+
+  /* ---------- Footer ---------- */
+  footer{
+    border-top: 1px solid var(--line);
+    padding: 50px 0;
+  }
+  footer .wrap{
+    display:flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 20px;
+    color: var(--text-dim);
+    font-size: 0.86rem;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+  }
+
+  :focus-visible{
+    outline: 2px solid var(--accent-2);
+    outline-offset: 2px;
+  }
+
+  /* ---------- Motion ---------- */
+  .hero-tag, .hero h1, .hero p, .hero-actions{
+    opacity: 0;
+    transform: translateY(16px);
+    animation: rise 0.7s cubic-bezier(.16,.8,.24,1) forwards;
+  }
+  .hero-tag{ animation-delay: .05s; }
+  .hero h1{ animation-delay: .18s; }
+  .hero p{ animation-delay: .32s; }
+  .hero-actions{ animation-delay: .44s; }
+  @keyframes rise{
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .reveal{
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity .7s cubic-bezier(.16,.8,.24,1), transform .7s cubic-bezier(.16,.8,.24,1);
+  }
+  .reveal.is-visible{
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-group .reveal:nth-child(2){ transition-delay: .08s; }
+  .reveal-group .reveal:nth-child(3){ transition-delay: .16s; }
+  .reveal-group .reveal:nth-child(4){ transition-delay: .24s; }
+
+  .btn{ transition: background .2s ease, border-color .2s ease, transform .2s ease; }
+  .btn:active{ transform: scale(0.97); }
+
+  @media (prefers-reduced-motion: reduce){
+    .hero-tag, .hero h1, .hero p, .hero-actions{
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+    .reveal{
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <nav class="wrap">
+    <div class="logo"><span class="logo-mark"></span>Nyra</div>
+    <div class="nav-links">
+      <a href="#platform">Platform</a>
+      <a href="#approach">Approach</a>
+      <a href="#stats">Results</a>
+      <a href="#contact">Contact</a>
+    </div>
+    <a href="#contact" class="nav-cta">Talk to us</a>
+  </nav>
+</header>
+
+<section class="hero">
+  <div class="video-container">
+    <video autoplay loop muted playsinline>
+      <source src="hero-bg.mp4" type="video/mp4" />
+      Your browser does not support the video tag.
+    </video>
+  </div>
+  <div class="hero-content wrap">
+    <div class="hero-tag"><span class="dot"></span>Now shipping v4.2 — real-time inference layer</div>
+    <h1>Infrastructure that adapts before your traffic does.</h1>
+    <p>Nyra reads the shape of your workload and reshapes itself around it — routing, scaling, and healing without a human in the loop.</p>
+    <div class="hero-actions">
+      <a href="#contact" class="btn btn-primary">Get started</a>
+      <a href="#platform" class="btn btn-ghost">See how it works</a>
+    </div>
+  </div>
+  <div class="hero-meta mono">
+    99.99% uptime<br>SOC 2 Type II
+  </div>
+</section>
+
+<div class="trust">
+  <div class="wrap">
+    <span>Running production workloads for teams at</span>
+    <div class="trust-names">
+      <span>Ferrovia</span>
+      <span>Kelson Labs</span>
+      <span>Northbeam</span>
+      <span>Arcplane</span>
+      <span>Vessel</span>
+    </div>
+  </div>
+</div>
+
+<section id="platform">
+  <div class="wrap">
+    <div class="section-head">
+      <h2>One control layer, three jobs it does without asking</h2>
+      <p>Most platforms make you choose between speed, cost, and reliability. Nyra treats them as one problem.</p>
+    </div>
+    <div class="ledger reveal-group">
+      <div class="ledger-row reveal">
+        <div class="idx mono">01</div>
+        <div><h3>Predictive scaling</h3></div>
+        <p>Forecasts load from historical and live signals, and provisions capacity minutes before demand arrives — not seconds after.</p>
+      </div>
+      <div class="ledger-row reveal">
+        <div class="idx mono">02</div>
+        <div><h3>Self-healing routing</h3></div>
+        <p>Detects degraded nodes from latency drift alone, reroutes traffic silently, and reports the fix instead of the failure.</p>
+      </div>
+      <div class="ledger-row reveal">
+        <div class="idx mono">03</div>
+        <div><h3>Cost-aware placement</h3></div>
+        <p>Places every workload on the cheapest infrastructure that still meets its latency budget, recalculated continuously.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="stats" id="stats">
+  <div class="wrap reveal-group">
+    <div class="reveal">
+      <div class="stat-num">340M</div>
+      <div class="stat-label">Requests routed daily</div>
+    </div>
+    <div class="reveal">
+      <div class="stat-num">41%</div>
+      <div class="stat-label">Average infra cost reduction</div>
+    </div>
+    <div class="reveal">
+      <div class="stat-num">6ms</div>
+      <div class="stat-label">Median decision latency</div>
+    </div>
+    <div class="reveal">
+      <div class="stat-num">210+</div>
+      <div class="stat-label">Engineering teams onboard</div>
+    </div>
+  </div>
+</div>
+
+<section id="approach">
+  <div class="wrap">
+    <div class="panel reveal-group">
+      <div class="panel-visual reveal">
+        <div class="line">$ nyra deploy --watch</div>
+        <div class="line"><span>✓</span> workload profile learned in 4.2s</div>
+        <div class="line"><span>✓</span> capacity pre-scaled: us-east, eu-west</div>
+        <div class="line"><span>✓</span> anomaly check passed, 0 flagged</div>
+        <div class="line">→ traffic live, drift monitoring on</div>
+      </div>
+      <div class="reveal">
+        <h2>Built for teams who'd rather ship than babysit dashboards</h2>
+        <p>Nyra plugs into your existing stack in one afternoon and starts making decisions your on-call engineer used to make at 3am.</p>
+        <ul class="check-list">
+          <li>Drops into Kubernetes, bare metal, or hybrid clouds without a rewrite</li>
+          <li>Explains every automated decision in plain language, not just logs</li>
+          <li>Rolls back any change it makes within one command</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="cta" id="contact">
+  <div class="wrap cta-box">
+    <h2>Bring Nyra into your stack this quarter.</h2>
+    <a href="#" class="btn btn-primary">Book a technical walkthrough</a>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div>© 2026 Nyra Systems, Inc.</div>
+    <div>Privacy · Terms · Status</div>
+  </div>
+</footer>
+
+<script>
+  const revealEls = document.querySelectorAll('.reveal');
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('is-visible');
+        io.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15 });
+  revealEls.forEach(el => io.observe(el));
+</script>
+</body>
+</html>
